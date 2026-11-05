@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Local Delivery Network</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-primary: #e0e0e0;
+            --accent-local: #2e7d32;
+            --accent-corporate: #c62828;
+            --border-color: #333;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { text-align: center; color: #fff; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+
+        .section-title { font-size: 1.2rem; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
+
+        .address-box, .tip-box, .concierge-box, .checkout-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .address-box input, .concierge-box input, .concierge-box textarea {
+            width: 100%;
+            padding: 10px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        .merchant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .merchant-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .merchant-card:hover { border-color: #666; }
+        .merchant-card.selected { border-color: #4CAF50; background: #1a2e1b; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .badge-local { background: var(--accent-local); color: #fff; }
+        .badge-corporate { background: var(--accent-corporate); color: #fff; }
+
+        .tip-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .tip-btn {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .tip-btn.selected { background: #2e7d32; border-color: #4CAF50; }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+        }
+        .total-row {
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        #payment-element { margin: 20px 0; }
+        button#submit-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button#submit-btn:hover { background: #45a049; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>National Local Delivery & Concierge</h1>
+    <div class="subtitle">Support Independent Nodes • Order Anything in Town</div>
+
+    <!-- Step 1: Address Entry -->
+    <div class="address-box">
+        <label for="delivery-address-input"><strong>1. Enter Your Delivery Address (Anywhere in the US)</strong></label>
+        <input type="text" id="delivery-address-input" placeholder="e.g., Grass Valley, CA or Fort Wayne, IN" onchange="filterMerchantsByAddress(this.value)">
+    </div>
+
+    <!-- Step 2: Search Store Items -->
+    <div class="address-box">
+        <label for="item-search-input"><strong>2. Search Store Menus & Items</strong></label>
+        <input type="text" id="item-search-input" placeholder="Type what you're craving (e.g. burger, latte, fries)..." oninput="searchStoreItems(this.value)">
+        <div id="search-results" style="margin-top: 10px; display: grid; gap: 8px;"></div>
+    </div>
+
+    <!-- Step 3: Choose Official Nodes -->
+    <div class="section-title">3. Choose an Official Local Node or Corporate Target</div>
+    <div id="merchant-container" class="merchant-grid"></div>
+
+    <!-- Or Step 3b: Custom Town Concierge -->
+    <div class="concierge-box">
+        <h3>Need something else from any store in town?</h3>
+        <p style="font-size: 0.9rem; color: #aaa;">Order anything (excluding alcohol & tobacco). We pick it up and bring it to you.</p>
+        <input type="text" id="concierge-store" placeholder="Store Name & Address" style="margin-bottom:10px;">
+        <textarea id="concierge-items" placeholder="List items you want..." style="width:100%; padding:8px; height:60px; background:#2a2a2a; border:1px solid #444; color:#fff; border-radius:4px; margin-bottom:10px;"></textarea>
+        <label style="font-size: 0.85rem; cursor:pointer;">
+            <input type="checkbox" id="upfront-funding-toggle" onchange="selectCustomConcierge()"> Driver needs to use personal funds upfront (+ $4.00 cash-advance fee)
+        </label>
+    </div>
+
+    <!-- Step 4: Driver Tip -->
+    <div class="tip-box">
+        <label><strong>4. Add a Driver Tip</strong></label>
+        <div class="tip-buttons">
+            <button class="tip-btn" onclick="setTip(0, this)">$0.00</button>
+            <button class="tip-btn selected" onclick="setTip(3.00, this)">$3.00</button>
+            <button class="tip-btn" onclick="setTip(5.00, this)">$5.00</button>
+            <button class="tip-btn" onclick="setTip(10.00, this)">$10.00</button>
+        </div>
+    </div>
+
+    <!-- Step 5: Checkout Summary -->
+    <div class="checkout-box">
+        <div class="section-title" style="margin-top:0;">5. Order Summary & Payment</div>
+        <div class="summary-row">
+            <span id="selected-merchant-name">Select a node or item above</span>
+            <span id="item-price-display">$12.00</span>
+        </div>
+        <div class="summary-row">
+            <span>Delivery Fee <small id="fee-note" style="color:#aaa;"></small></span>
+            <span id="delivery-fee-display">$0.00</span>
+        </div>
+        <div class="summary-row">
+            <span>Driver Tip</span>
+            <span id="tip-display">$3.00</span>
+        </div>
+        <div class="summary-row total-row">
+            <span>Total</span>
+            <span id="total-display">$15.00</span>
+        </div>
+
+        <form id="payment-form" class="hidden">
+            <div id="payment-element"></div>
+            <button id="submit-btn">Pay & Dispatch Delivery</button>
+            <div id="error-message" style="color: #ff6b6b; margin-top: 10px;"></div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const stripe = Stripe('{{ stripe_publishable_key }}');
+    let elements;
+    let selectedMerchantId = null;
+    let itemPriceCents = 1200;
+    let currentDeliveryFee = 0;
+    let currentTip = 3.00;
+    let isConciergeOrder = false;
+
+    function setTip(amount, btnElement) {
+        document.querySelectorAll('.tip-btn').forEach(b => b.classList.remove('selected'));
+        btnElement.classList.add('selected');
+        currentTip = amount;
+        document.getElementById('tip-display').innerText = `$${currentTip.toFixed(2)}`;
+        updateTotalsAndPayment();
+    }
+
+    async function searchStoreItems(query) {
+        const addressVal = document.getElementById('delivery-address-input').value;
+        let city = addressVal.toLowerCase().includes('fort wayne') ? 'Fort Wayne' : (addressVal.toLowerCase().includes('grass valley') ? 'Grass Valley' : '');
+
+        const response = await fetch(`/api/search-items?q=${encodeURIComponent(query)}&city=${encodeURIComponent(city)}`);
+        const items = await response.json();
+
+        const container = document.getElementById('search-results');
+        container.innerHTML = '';
+
+        if (!query.trim()) return;
+
+        if (items.length === 0) {
+            container.innerHTML = '<div style="color:#888; font-size:0.9rem;">No matching items found. Try another search or use the Custom Concierge below!</div>';
+            return;
+        }
+
+        items.forEach(i => {
+            const el = document.createElement('div');
+            el.style.background = '#2a2a2a';
+            el.style.padding = '10px';
+            el.style.borderRadius = '4px';
+            el.style.cursor = 'pointer';
+            el.style.border = '1px solid #444';
+            el.innerHTML = `
+                <div style="display:flex; justify-content:space-between; font-weight:bold;">
+                    <span>${i.item_name} ($${i.price.toFixed(2)})</span>
+                    <span style="color:#4CAF50; font-size:0.85rem;">${i.merchant_name} (${i.city})</span>
+                </div>
+                <div style="font-size:0.85rem; color:#aaa; margin-top:3px;">${i.description}</div>
+            `;
+            el.onclick = () => selectSearchedItem(i);
+            container.appendChild(el);
+        });
+    }
+
+    function selectSearchedItem(item) {
+        selectedMerchantId = item.merchant_id;
+        itemPriceCents = Math.round(item.price * 100);
+        isConciergeOrder = false;
+
+        document.getElementById('selected-merchant-name').innerText = `${item.merchant_name} — ${item.item_name}`;
+        document.getElementById('item-price-display').innerText = `$${item.price.toFixed(2)}`;
+
+        document.querySelectorAll('.merchant-card').forEach(c => c.classList.remove('selected'));
+
+        fetch('/api/calculate-fee', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ merchant_id: item.merchant_id, is_custom_concierge: false })
+        })
+        .then(res => res.json())
+        .then(data => {
+            currentDeliveryFee = data.delivery_fee;
+            document.getElementById('delivery-fee-display').innerText = `$${currentDeliveryFee.toFixed(2)}`;
+            document.getElementById('fee-note').innerText = data.is_node_partner ? '(Subsidized Node Rate)' : '(Corporate Surcharge)';
+            updateTotalsAndPayment();
+        });
+    }
+
+    async function loadMerchants(cityQuery = '') {
+        const url = cityQuery ? `/api/merchants?city=${encodeURIComponent(cityQuery)}` : '/api/merchants';
+        const response = await fetch(url);
+        const merchants = await response.json();
+
+        const container = document.getElementById('merchant-container');
+        container.innerHTML = '';
+
+        if (merchants.length === 0) {
+            container.innerHTML = '<div style="color:#888; grid-column: 1/-1;">No partner nodes directly in this city yet. Use the Custom Concierge below!</div>';
+            return;
+        }
+
+        merchants.forEach(m => {
+            const card = document.createElement('div');
+            card.className = 'merchant-card';
+            card.id = `card-${m.id}`;
+
+            const isNode = m.type === 'node_partner';
+            card.innerHTML = `
+                <strong>${m.name}</strong>
+                <div style="font-size:0.85rem; color:#888; margin-top:4px;">${m.city}, ${m.state}</div>
+                <div>
+                    <span class="badge ${isNode ? 'badge-local' : 'badge-corporate'}">
+                        ${isNode ? '⭐ Local Node Partner' : '⚠️ Corporate Chain'}
+                    </span>
+                </div>
+            `;
+
+            card.onclick = () => selectMerchant(m.id, card);
+            container.appendChild(card);
+        });
+    }
+
+    function filterMerchantsByAddress(addressString) {
+        let city = '';
+        if (addressString.toLowerCase().includes('fort wayne')) {
+            city = 'Fort Wayne';
+        } else if (addressString.toLowerCase().includes('grass valley')) {
+            city = 'Grass Valley';
+        }
+        loadMerchants(city);
+    }
+
+    async function selectMerchant(merchantId, cardElement) {
+        selectedMerchantId = merchantId;
+        isConciergeOrder = false;
+
+        document.querySelectorAll('.merchant-card').forEach(c => c.classList.remove('selected'));
+        if (cardElement) cardElement.classList.add('selected');
+
+        const response = await fetch('/api/calculate-fee', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ merchant_id: merchantId, is_custom_concierge: false })
+        });
+
+        const data = await response.json();
+        currentDeliveryFee = typeof data.delivery_fee === 'number' ? data.delivery_fee : 0.00;
+
+        document.getElementById('selected-merchant-name').innerText = data.merchant_name || merchantId;
+        document.getElementById('item-price-display').innerText = `$${(itemPriceCents / 100).toFixed(2)}`;
+        document.getElementById('delivery-fee-display').innerText = `$${currentDeliveryFee.toFixed(2)}`;
+        document.getElementById('fee-note').innerText = data.is_node_partner ? '(Subsidized Node Rate)' : '(Corporate Surcharge)';
+
+        updateTotalsAndPayment();
+    }
+
+    async function selectCustomConcierge() {
+        document.querySelectorAll('.merchant-card').forEach(c => c.classList.remove('selected'));
+        selectedMerchantId = 'custom_concierge';
+        isConciergeOrder = true;
+        const requiresFunding = document.getElementById('upfront-funding-toggle').checked;
+
+        const response = await fetch('/api/calculate-fee', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ is_custom_concierge: true, upfront_funding: requiresFunding })
+        });
+
+        const data = await response.json();
+        currentDeliveryFee = data.delivery_fee;
+
+        document.getElementById('selected-merchant-name').innerText = "Custom Town Concierge";
+        document.getElementById('delivery-fee-display').innerText = `$${currentDeliveryFee.toFixed(2)}`;
+        document.getElementById('fee-note').innerText = requiresFunding ? '(Includes Cash-Advance Risk Fee)' : '(Standard Concierge Fee)';
+
+        updateTotalsAndPayment();
+    }
+
+    function updateTotalsAndPayment() {
+        if (!selectedMerchantId) return;
+        const totalCents = itemPriceCents + Math.round(currentDeliveryFee * 100) + Math.round(currentTip * 100);
+        document.getElementById('total-display').innerText = `$${(totalCents / 100).toFixed(2)}`;
+
+        const requiresFunding = isConciergeOrder && document.getElementById('upfront-funding-toggle').checked;
+        initializeStripePayment(selectedMerchantId, itemPriceCents, isConciergeOrder, requiresFunding, currentTip);
+    }
+
+    async function initializeStripePayment(merchantId, itemTotalCents, isConcierge, upfrontFunding = false, tipAmount = 0) {
+        const response = await fetch('/create-payment-intent', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                merchant_id: merchantId,
+                item_total_cents: itemTotalCents,
+                is_custom_concierge: isConcierge,
+                upfront_funding: upfrontFunding,
+                tip_amount: tipAmount
+            })
+        });
+
+        const data = await response.json();
+        if (!data.clientSecret) return;
+
+        document.getElementById('payment-form').classList.remove('hidden');
+        const paymentElementContainer = document.getElementById('payment-element');
+        paymentElementContainer.innerHTML = '';
+
+        elements = stripe.elements({ clientSecret: data.clientSecret });
+        const paymentElement = elements.create('payment');
+        paymentElement.mount('#payment-element');
+    }
+
+    document.getElementById('payment-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!elements) return;
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: { return_url: window.location.origin + '/dispatch' }
+        });
+        if (error) {
+            document.getElementById('error-message').innerText = error.message;
+        }
+    });
+
+    loadMerchants();
+</script>
+
+</body>
+</html>

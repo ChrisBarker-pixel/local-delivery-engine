@@ -1,0 +1,80 @@
+{
+  "burgers_and_cream_gv": {
+    "id": "burgers_and_cream_gv",
+    "name": "Burgers & Cream",
+    "city": "Grass Valley",
+    "state": "CA",
+    "type": "node_partner",
+    "category": "burgers",
+    "address": "736 Taylorville Rd, Grass Valley, CA 95945",
+    "base_delivery_fee": 7.50,
+    "active": true,
+    "menu": [
+      {"id": "bc_1", "name": "Classic Cheeseburger", "price": 11.50, "description": "Single patty with cheddar, lettuce, tomato, special sauce"},
+      {"id": "bc_2", "name": "Double Bacon Burger", "price": 14.50, "description": "Double patty, thick-cut bacon, American cheese"},
+      {"id": "bc_3", "name": "Hand-Spun Vanilla Shake", "price": 6.50, "description": "Real vanilla bean ice cream shake"}
+    ]
+  },
+  "carolinas_coffee_gv": {
+    "id": "carolinas_coffee_gv",
+    "name": "Carolina's Coffee Roasters",
+    "city": "Grass Valley",
+    "state": "CA",
+    "type": "node_partner",
+    "category": "coffee",
+    "address": "128 S Auburn St, Grass Valley, CA 95945",
+    "base_delivery_fee": 6.50,
+    "active": true,
+    "menu": [
+      {"id": "cc_1", "name": "Iced Vanilla Latte", "price": 6.00, "description": "Double shot espresso with house vanilla and milk"},
+      {"id": "cc_2", "name": "Nitro Cold Brew", "price": 5.50, "description": "Smooth nitro-infused cold brew on tap"},
+      {"id": "cc_3", "name": "Avocado Toast", "price": 9.00, "description": "Sourdough, smashed avocado, everything seasoning"}
+    ]
+  },
+  "fort_wayne_burger_node": {
+    "id": "fort_wayne_burger_node",
+    "name": "Summit City Grille",
+    "city": "Fort Wayne",
+    "state": "IN",
+    "type": "node_partner",
+    "category": "burgers",
+    "address": "Fort Wayne, IN",
+    "base_delivery_fee": 7.50,
+    "active": true,
+    "menu": [
+      {"id": "sc_1", "name": "Summit Signature Burger", "price": 13.00, "description": "Local beef blend with artisanal cheese and caramelized onions"},
+      {"id": "sc_2", "name": "Truffle Fries", "price": 7.00, "description": "Crispy fries tossed in truffle oil and parmesan"},
+      {"id": "sc_3", "name": "Craft Root Beer", "price": 4.50, "description": "Draft root beer brewed locally"}
+    ]
+  },
+  "burger_king_gv": {
+    "id": "burger_king_gv",
+    "name": "Burger King",
+    "city": "Grass Valley",
+    "state": "CA",
+    "type": "corporate_chain",
+    "category": "burgers",
+    "address": "East Main St, Grass Valley, CA 95945",
+    "base_delivery_fee": 14.00,
+    "active": true,
+    "menu": [
+      {"id": "bk_1", "name": "Whopper Meal", "price": 12.00, "description": "Flame-grilled beef patty with medium fries and drink"},
+      {"id": "bk_2", "name": "Chicken Royale Meal", "price": 11.00, "description": "Long chicken sandwich with fries and drink"}
+    ]
+  },
+  "starbucks_gv": {
+    "id": "starbucks_gv",
+    "name": "Starbucks",
+    "city": "Grass Valley",
+    "state": "CA",
+    "type": "corporate_chain",
+    "category": "coffee",
+    "address": "Grass Valley, CA 95945",
+    "base_delivery_fee": 12.50,
+    "active": true,
+    "menu": [
+      {"id": "sb_1", "name": "Caramel Macchiato", "price": 6.75, "description": "Espresso with vanilla-flavored syrup and caramel drizzle"},
+      {"id": "sb_2", "name": "Dragon Drink", "price": 6.25, "description": "Mango dragonfruit refresher with coconutmilk"}
+    ]
+  }
+}
