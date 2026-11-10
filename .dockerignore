@@ -1,0 +1,9 @@
+# Credentials and environment
+serviceAccountKey.json
+.env
+
+# Local development files
+.idea/
+__pycache__/
+*.pyc
+venv/

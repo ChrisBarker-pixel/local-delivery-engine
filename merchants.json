@@ -1,80 +1,551 @@
 {
-  "burgers_and_cream_gv": {
-    "id": "burgers_and_cream_gv",
-    "name": "Burgers & Cream",
-    "city": "Grass Valley",
-    "state": "CA",
-    "type": "node_partner",
-    "category": "burgers",
-    "address": "736 Taylorville Rd, Grass Valley, CA 95945",
-    "base_delivery_fee": 7.50,
-    "active": true,
-    "menu": [
-      {"id": "bc_1", "name": "Classic Cheeseburger", "price": 11.50, "description": "Single patty with cheddar, lettuce, tomato, special sauce"},
-      {"id": "bc_2", "name": "Double Bacon Burger", "price": 14.50, "description": "Double patty, thick-cut bacon, American cheese"},
-      {"id": "bc_3", "name": "Hand-Spun Vanilla Shake", "price": 6.50, "description": "Real vanilla bean ice cream shake"}
-    ]
-  },
-  "carolinas_coffee_gv": {
-    "id": "carolinas_coffee_gv",
-    "name": "Carolina's Coffee Roasters",
-    "city": "Grass Valley",
-    "state": "CA",
-    "type": "node_partner",
-    "category": "coffee",
-    "address": "128 S Auburn St, Grass Valley, CA 95945",
-    "base_delivery_fee": 6.50,
-    "active": true,
-    "menu": [
-      {"id": "cc_1", "name": "Iced Vanilla Latte", "price": 6.00, "description": "Double shot espresso with house vanilla and milk"},
-      {"id": "cc_2", "name": "Nitro Cold Brew", "price": 5.50, "description": "Smooth nitro-infused cold brew on tap"},
-      {"id": "cc_3", "name": "Avocado Toast", "price": 9.00, "description": "Sourdough, smashed avocado, everything seasoning"}
-    ]
-  },
-  "fort_wayne_burger_node": {
-    "id": "fort_wayne_burger_node",
-    "name": "Summit City Grille",
-    "city": "Fort Wayne",
-    "state": "IN",
-    "type": "node_partner",
-    "category": "burgers",
-    "address": "Fort Wayne, IN",
-    "base_delivery_fee": 7.50,
-    "active": true,
-    "menu": [
-      {"id": "sc_1", "name": "Summit Signature Burger", "price": 13.00, "description": "Local beef blend with artisanal cheese and caramelized onions"},
-      {"id": "sc_2", "name": "Truffle Fries", "price": 7.00, "description": "Crispy fries tossed in truffle oil and parmesan"},
-      {"id": "sc_3", "name": "Craft Root Beer", "price": 4.50, "description": "Draft root beer brewed locally"}
-    ]
-  },
-  "burger_king_gv": {
-    "id": "burger_king_gv",
-    "name": "Burger King",
-    "city": "Grass Valley",
-    "state": "CA",
-    "type": "corporate_chain",
-    "category": "burgers",
-    "address": "East Main St, Grass Valley, CA 95945",
-    "base_delivery_fee": 14.00,
-    "active": true,
-    "menu": [
-      {"id": "bk_1", "name": "Whopper Meal", "price": 12.00, "description": "Flame-grilled beef patty with medium fries and drink"},
-      {"id": "bk_2", "name": "Chicken Royale Meal", "price": 11.00, "description": "Long chicken sandwich with fries and drink"}
-    ]
-  },
-  "starbucks_gv": {
-    "id": "starbucks_gv",
-    "name": "Starbucks",
-    "city": "Grass Valley",
-    "state": "CA",
-    "type": "corporate_chain",
-    "category": "coffee",
-    "address": "Grass Valley, CA 95945",
-    "base_delivery_fee": 12.50,
-    "active": true,
-    "menu": [
-      {"id": "sb_1", "name": "Caramel Macchiato", "price": 6.75, "description": "Espresso with vanilla-flavored syrup and caramel drizzle"},
-      {"id": "sb_2", "name": "Dragon Drink", "price": 6.25, "description": "Mango dragonfruit refresher with coconutmilk"}
-    ]
-  }
+    "burgers_and_cream": {
+        "name": "Burgers & Cream",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Burgers": [
+                {
+                    "name": "Classic Cheeseburger",
+                    "price": 10.99,
+                    "description": "Single patty with cheddar, lettuce, tomato."
+                },
+                {
+                    "name": "Double Bacon Stack",
+                    "price": 14.5,
+                    "description": "Double patty, thick-cut bacon, American cheese."
+                }
+            ],
+            "Shakes": [
+                {
+                    "name": "Vanilla Bean Malt",
+                    "price": 6.5,
+                    "description": "Hand-spun real ice cream."
+                }
+            ]
+        }
+    },
+    "summit_city_grille": {
+        "name": "Summit City Grille",
+        "city": "Fort Wayne, IN",
+        "tier": "local",
+        "base_fee": 7.5,
+        "menu": {
+            "Entrees": [
+                {
+                    "name": "Hoosier Ribeye",
+                    "price": 28.0,
+                    "description": "Prime cut with garlic butter and sides."
+                }
+            ]
+        }
+    },
+    "carolinas_coffee": {
+        "name": "Caroline's Coffee Roasters",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Coffee": [
+                {
+                    "name": "Sierra Gold Latte",
+                    "price": 5.5,
+                    "description": "Organic honey espresso."
+                }
+            ]
+        }
+    },
+    "starbucks_gv": {
+        "name": "Starbucks",
+        "city": "Grass Valley, CA",
+        "tier": "corporate",
+        "base_fee": 12.5,
+        "menu": {
+            "Drinks": [
+                {
+                    "name": "Caramel Macchiato",
+                    "price": 6.75,
+                    "description": "Vanilla-flavored syrup, espresso, milk."
+                }
+            ]
+        }
+    },
+    "mountain_pastries": {
+        "name": "Mountain Pastries",
+        "city": "Nevada City, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Bakery": [
+                {
+                    "name": "Apple Bear Claw",
+                    "price": 4.5
+                }
+            ]
+        }
+    },
+    " SPD_market": {
+        "name": "SPD Market",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Groceries": [
+                {
+                    "name": "Local Organic Produce Basket",
+                    "price": 18.0
+                }
+            ]
+        }
+    },
+    "briarpatch": {
+        "name": "BriarPatch Food Co-op",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Organic": [
+                {
+                    "name": "Kombucha on Tap",
+                    "price": 5.0
+                }
+            ]
+        }
+    },
+    "bicycle_thief": {
+        "name": "Bicycle Thief",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Bakery & Cafe": [
+                {
+                    "name": "Artisan Pastry Box",
+                    "price": 14.0,
+                    "description": "Fresh baked morning pastries."
+                }
+            ]
+        }
+    },
+    "brew_bakers": {
+        "name": "Brew Bakers Coffee and Pastry House",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Coffee": [
+                {
+                    "name": "Signature House Roast",
+                    "price": 4.75,
+                    "description": "Freshly brewed local blend."
+                }
+            ]
+        }
+    },
+    "cake_bakery": {
+        "name": "Cake Bakery & Caf\u00e9",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Bakery": [
+                {
+                    "name": "Custom Cupcake Duo",
+                    "price": 6.5,
+                    "description": "Handcrafted sweet treats."
+                }
+            ]
+        }
+    },
+    "cirinos": {
+        "name": "Cirino's At Main Street",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Italian": [
+                {
+                    "name": "Classic Lasagna",
+                    "price": 22.0,
+                    "description": "Family recipe baked pasta."
+                }
+            ]
+        }
+    },
+    "corvus_bakery": {
+        "name": "Corvus Bakery",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Bakery": [
+                {
+                    "name": "Sourdough Loaf",
+                    "price": 8.5,
+                    "description": "Hand-kneaded artisan bread."
+                }
+            ]
+        }
+    },
+    "diegos_restaurant": {
+        "name": "Diego's Restaurant",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Mexican": [
+                {
+                    "name": "Carne Asada Tacos",
+                    "price": 16.0,
+                    "description": "Grilled steak with fresh salsa."
+                }
+            ]
+        }
+    },
+    "dominos": {
+        "name": "Domino's",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Pizza": [
+                {
+                    "name": "Medium Pepperoni Pizza",
+                    "price": 14.99,
+                    "description": "Classic corporate chain pizza."
+                }
+            ]
+        }
+    },
+    "el_barrio": {
+        "name": "El Barrio Mexican Market",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Market": [
+                {
+                    "name": "Authentic Tamale Plate",
+                    "price": 12.0,
+                    "description": "Handmade corn tamales."
+                }
+            ]
+        }
+    },
+    "flour_garden": {
+        "name": "Flour Garden Bakery",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Bakery": [
+                {
+                    "name": "Morning Cinnamon Roll",
+                    "price": 5.25,
+                    "description": "Glazed pastry favorite."
+                }
+            ]
+        }
+    },
+    "grocery_outlet": {
+        "name": "Grocery Outlet",
+        "city": "Grass Valley, CA",
+        "tier": "corporate",
+        "base_fee": 12.5,
+        "menu": {
+            "Groceries": [
+                {
+                    "name": "Bargain Snack Bundle",
+                    "price": 10.0,
+                    "description": "Discount grocery items."
+                }
+            ]
+        }
+    },
+    "kaido_sushi": {
+        "name": "Kaido Sushi",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Japanese": [
+                {
+                    "name": "Dragon Roll",
+                    "price": 18.0,
+                    "description": "Eel, avocado, and cucumber."
+                }
+            ]
+        }
+    },
+    "lazy_dog_choc": {
+        "name": "Lazy Dog Chocolateria",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Desserts": [
+                {
+                    "name": "Artisan Truffle Box",
+                    "price": 16.5,
+                    "description": "Handcrafted chocolates."
+                }
+            ]
+        }
+    },
+    "marias_mexican": {
+        "name": "Maria's Mexican Restaurant",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Mexican": [
+                {
+                    "name": "Enchiladas Verdes",
+                    "price": 17.5,
+                    "description": "Shredded chicken with green sauce."
+                }
+            ]
+        }
+    },
+    "marshalls_pasties": {
+        "name": "Marshall's Pasties",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "British Fare": [
+                {
+                    "name": "Traditional Cornish Pasty",
+                    "price": 11.5,
+                    "description": "Baked pastry filled with beef and root veggies."
+                }
+            ]
+        }
+    },
+    "meze_eatery": {
+        "name": "Meze Eatery",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Mediterranean": [
+                {
+                    "name": "Falafel Wrap & Hummus",
+                    "price": 15.0,
+                    "description": "Crispy chickpea fritters."
+                }
+            ]
+        }
+    },
+    "pepes_cafe": {
+        "name": "Pepe's Cafe",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Breakfast": [
+                {
+                    "name": "Huevos Rancheros",
+                    "price": 13.5,
+                    "description": "Eggs over corn tortillas with salsa."
+                }
+            ]
+        }
+    },
+    "petes_pizza": {
+        "name": "Pete's Pizza and Taphouse",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Pizza & Tap": [
+                {
+                    "name": "Gold Country Supreme Pizza",
+                    "price": 24.0,
+                    "description": "Loaded local favorite pizza."
+                }
+            ]
+        }
+    },
+    "safeway_sutton": {
+        "name": "Safeway (867 Sutton Way)",
+        "city": "Grass Valley, CA",
+        "tier": "corporate",
+        "base_fee": 12.5,
+        "menu": {
+            "Groceries": [
+                {
+                    "name": "Express Grocery Basket",
+                    "price": 25.0,
+                    "description": "Supermarket essentials."
+                }
+            ]
+        }
+    },
+    "safeway_neal": {
+        "name": "Safeway (105 Neal St)",
+        "city": "Grass Valley, CA",
+        "tier": "corporate",
+        "base_fee": 12.5,
+        "menu": {
+            "Groceries": [
+                {
+                    "name": "Express Grocery Basket",
+                    "price": 25.0,
+                    "description": "Supermarket essentials."
+                }
+            ]
+        }
+    },
+    "save_mart": {
+        "name": "Save Mart",
+        "city": "Grass Valley, CA",
+        "tier": "corporate",
+        "base_fee": 12.5,
+        "menu": {
+            "Groceries": [
+                {
+                    "name": "Everyday Pantry Staples",
+                    "price": 20.0,
+                    "description": "Supermarket items."
+                }
+            ]
+        }
+    },
+    "sourdough_and_co": {
+        "name": "Sourdough & Co.",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Sandwiches": [
+                {
+                    "name": "Turkey Bacon Avocado on Sourdough",
+                    "price": 14.5,
+                    "description": "Fresh baked bread sandwich."
+                }
+            ]
+        }
+    },
+    "south_pine_cafe": {
+        "name": "South Pine Caf\u00e9",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Caf\u00e9": [
+                {
+                    "name": "Organic Avocado Toast",
+                    "price": 12.0,
+                    "description": "Sourdough with microgreens."
+                }
+            ]
+        }
+    },
+    "spd_markets": {
+        "name": "SPD Markets (W McKnight Way)",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Groceries": [
+                {
+                    "name": "Local Produce Basket",
+                    "price": 18.0,
+                    "description": "Fresh organic vegetables."
+                }
+            ]
+        }
+    },
+    "taste_of_thai": {
+        "name": "Taste of Thai",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Thai": [
+                {
+                    "name": "Pad Thai with Shrimp",
+                    "price": 17.0,
+                    "description": "Rice noodles with peanuts and bean sprouts."
+                }
+            ]
+        }
+    },
+    "golden_gate_saloon": {
+        "name": "The Golden Gate Saloon",
+        "city": "Nevada City, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Pub Fare": [
+                {
+                    "name": "Historic Saloon Burger",
+                    "price": 16.5,
+                    "description": "Classic tavern burger."
+                }
+            ]
+        }
+    },
+    "lounge_at_enriques": {
+        "name": "The Lounge at Enrique's",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Mexican & Lounge": [
+                {
+                    "name": "Carne Asada Burrito",
+                    "price": 15.5,
+                    "description": "Wrapped with rice and beans."
+                }
+            ]
+        }
+    },
+    "thirsty_barrel": {
+        "name": "Thirsty Barrel Taphouse & Grille",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Taphouse": [
+                {
+                    "name": "Taphouse Burger & Craft Beer",
+                    "price": 20.0,
+                    "description": "Gourmet patty with local brew."
+                }
+            ]
+        }
+    },
+    "tofanellis": {
+        "name": "Tofanelli's Gold Country Bistro",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Bistro": [
+                {
+                    "name": "Gold Country Benedict",
+                    "price": 19.0,
+                    "description": "Poached eggs on English muffin with hollandaise."
+                }
+            ]
+        }
+    },
+    "wyld_tiger": {
+        "name": "Wyld Tiger Sourdough Baker",
+        "city": "Grass Valley, CA",
+        "tier": "local",
+        "base_fee": 6.5,
+        "menu": {
+            "Bakery": [
+                {
+                    "name": "Wild Ferment Country Loaf",
+                    "price": 9.0,
+                    "description": "Naturally leavened artisanal bread."
+                }
+            ]
+        }
+    }
 }

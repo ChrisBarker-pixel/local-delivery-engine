@@ -3,3 +3,6 @@ venv/
 __pycache__/
 orders.json
 firebase_credentials.json
+serviceAccountKey.json
+*.pyc
+*.local
